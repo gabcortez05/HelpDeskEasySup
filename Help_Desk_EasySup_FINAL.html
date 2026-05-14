@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Help Desk EasySup</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box
+}
+
+body{
+font-family:Inter,sans-serif;
+background:#050816;
+color:#fff;
+min-height:100vh
+}
+
+header{
+padding:18px 30px;
+border-bottom:1px solid rgba(255,255,255,.06);
+background:#070d1c;
+position:sticky;
+top:0;
+z-index:10
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px;
+max-width:1700px;
+margin:auto
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:14px
+}
+
+.logo img{
+width:90px;
+border-radius:14px
+}
+
+.actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap
+}
+
+button{
+border:none;
+cursor:pointer;
+transition:.2s;
+font-family:inherit
+}
+
+.top-btn{
+padding:13px 18px;
+border-radius:14px;
+background:#10182d;
+color:#fff;
+border:1px solid #253252;
+font-weight:600
+}
+
+.top-btn.active,
+.top-btn:hover{
+background:#c178e3;
+border-color:#c178e3
+}
+
+.container{
+padding:28px;
+max-width:1700px;
+margin:auto
+}
+
+.page{
+display:none
+}
+
+.page.active{
+display:block
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+gap:22px
+}
+
+.card{
+background:#0b1020;
+border:1px solid rgba(255,255,255,.05);
+border-radius:24px;
+padding:24px
+}
+
+.card h2{
+font-size:22px;
+margin-bottom:8px
+}
+
+.card p{
+color:#9ca9c7;
+margin-bottom:18px
+}
+
+.scripts{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px
+}
+
+.script{
+background:#10182d;
+border:1px solid rgba(255,255,255,.04);
+padding:18px;
+border-radius:16px;
+font-weight:600;
+text-align:left;
+color:#fff
+}
+
+.script:hover{
+background:#182442
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:100
+}
+
+.modal.active{
+display:flex
+}
+
+.modal-box{
+width:min(1200px,100%);
+max-height:90vh;
+overflow:auto;
+background:#0b1020;
+border-radius:26px;
+padding:24px
+}
+
+.close{
+background:none;
+color:#fff;
+font-size:28px
+}
+
+.editor-card{
+background:#10182d;
+padding:18px;
+border-radius:18px;
+margin-bottom:18px
+}
+
+input,
+textarea,
+select{
+width:100%;
+background:#0f172a;
+border:1px solid #23314f;
+color:#fff;
+padding:14px;
+border-radius:14px;
+margin-top:10px;
+margin-bottom:16px;
+font-family:inherit
+}
+
+.save{
+background:#c178e3;
+padding:14px 18px;
+border-radius:14px;
+color:#fff;
+font-weight:700
+}
+
+.delete{
+background:#ef4444;
+padding:12px 14px;
+border-radius:12px;
+color:#fff;
+margin-top:10px
+}
+
+.menu-icon{
+width:90px;
+height:90px;
+border-radius:18px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(193,120,227,.08);
+border:1px solid rgba(193,120,227,.25)
+}
+
+.menu-icon img{
+width:42px;
+height:42px;
+object-fit:contain
+}
+
+.icon-selector{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:12px
+}
+
+.icon-option{
+height:84px;
+border-radius:16px;
+background:#10182d;
+border:1px solid rgba(255,255,255,.08);
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer
+}
+
+.icon-option.active{
+border-color:#c178e3;
+background:rgba(193,120,227,.12)
+}
+
+.icon-option img{
+width:34px;
+height:34px;
+object-fit:contain
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="header">
+
+<div class="logo">
+
+<img src="logo.png">
+
+<div>
+<h1>Help Desk EasySup</h1>
+<p>Sistema de Atendimento</p>
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="top-btn active"
+onclick="switchPage('page1',this)">
+Atendimento
+</button>
+
+<button class="top-btn"
+onclick="switchPage('page2',this)">
+Tratativa
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<div id="page1" class="page active">
+
+<button class="top-btn"
+style="margin-bottom:20px"
+onclick="openMenusEditor('page1')">
+
+Editar Menus desta Página
+
+</button>
+
+<div class="grid" id="page1Menus"></div>
+
+</div>
+
+<div id="page2" class="page">
+
+<button class="top-btn"
+style="margin-bottom:20px"
+onclick="openMenusEditor('page2')">
+
+Editar Menus desta Página
+
+</button>
+
+<div class="grid" id="page2Menus"></div>
+
+</div>
+
+</div>
+
+<div class="modal" id="menusModal">
+
+<div class="modal-box">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+
+<h2>Editar Menus</h2>
+
+<button class="close"
+onclick="closeModal('menusModal')">
+×
+</button>
+
+</div>
+
+<div id="menusEditor"></div>
+
+<button class="save"
+onclick="addMenu()">
+
++ Novo Menu
+
+</button>
+
+</div>
+
+</div>
+
+<div class="modal" id="singleScriptModal">
+
+<div class="modal-box">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+
+<h2>Editar Scripts do Menu</h2>
+
+<button class="close"
+onclick="closeModal('singleScriptModal')">
+
+×
+
+</button>
+
+</div>
+
+<div id="singleScriptsEditor"></div>
+
+<button class="save"
+onclick="addScriptToCurrentMenu()">
+
++ Novo Script
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const STORAGE='ws_support_pro';
+
+let currentMenusPage='page1';
+let currentMenuEditing=null;
+
+let data=JSON.parse(localStorage.getItem(STORAGE))||{
+
+menus:[
+
+{id:1,page:'page1',title:'Respostas Rápidas',desc:'Clique para copiar scripts automaticamente',icon:'bolt'},
+
+{id:2,page:'page1',title:'Configurações do Roteador',desc:'Configurações utilizadas com frequência',icon:'gear'},
+
+{id:3,page:'page2',title:'Gerenciador de Textos',desc:'Scripts organizados',icon:'notes'}
+
+],
+
+scripts:[
+
+{id:1,menu:1,title:'Como posso te ajudar?',text:'Olá {nome}, como posso ajudar?'},
+
+{id:2,menu:1,title:'Confirmar CPF',text:'Pode confirmar os últimos dígitos do CPF?'}
+
+]
+
+};
+
+function save(){
+localStorage.setItem(STORAGE,JSON.stringify(data));
+}
+
+function switchPage(id,btn){
+
+document.querySelectorAll('.page')
+.forEach(p=>p.classList.remove('active'));
+
+document.getElementById(id)
+.classList.add('active');
+
+document.querySelectorAll('.actions .top-btn')
+.forEach(b=>b.classList.remove('active'));
+
+btn.classList.add('active');
+
+}
+
+function openModal(id){
+document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id){
+document.getElementById(id).classList.remove('active');
+}
+
+function copyScript(text){
+navigator.clipboard.writeText(decodeURIComponent(text));
+}
+
+function render(){
+
+['page1','page2'].forEach(page=>{
+
+const container=document.getElementById(page+'Menus');
+
+container.innerHTML='';
+
+data.menus
+.filter(m=>m.page===page)
+.forEach(menu=>{
+
+const card=document.createElement('div');
+
+card.className='card';
+
+const scripts=data.scripts.filter(s=>s.menu===menu.id);
+
+card.innerHTML=`
+
+<div style="display:flex;gap:18px;align-items:flex-start">
+
+<div class="menu-icon">
+
+<img src="icones_helpdesk/${menu.icon}.png">
+
+</div>
+
+<div style="flex:1">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+
+<h2>${menu.title}</h2>
+
+<button class="top-btn"
+style="padding:10px 14px;border-radius:12px"
+onclick="openScriptEditor(${menu.id})">
+
+✎
+
+</button>
+
+</div>
+
+<p>${menu.desc}</p>
+
+<div class="scripts">
+
+${scripts.map(s=>`
+
+<button class="script"
+onclick="copyScript('${encodeURIComponent(s.text)}')">
+
+${s.title}
+
+</button>
+
+`).join('')}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+})
+
+})
+
+renderMenusEditor();
+
+save();
+
+}
+
+function selectIcon(menuId,icon){
+
+const menu=data.menus.find(m=>m.id===menuId);
+
+menu.icon=icon;
+
+save();
+
+render();
+
+openMenusEditor(currentMenusPage);
+
+}
+
+function renderMenusEditor(){
+
+const el=document.getElementById('menusEditor');
+
+el.innerHTML='';
+
+data.menus
+.filter(menu=>menu.page===currentMenusPage)
+.forEach(menu=>{
+
+const div=document.createElement('div');
+
+div.className='editor-card';
+
+div.innerHTML=`
+
+<label>Título do Menu</label>
+
+<input value="${menu.title}"
+onchange="updateMenu(${menu.id},'title',this.value)">
+
+<label>Descrição</label>
+
+<input value="${menu.desc}"
+onchange="updateMenu(${menu.id},'desc',this.value)">
+
+<label>Ícone</label>
+
+<div class="icon-selector">
+
+<div class="icon-option ${menu.icon==='chat'?'active':''}"
+onclick="selectIcon(${menu.id},'chat')">
+
+<img src="icones_helpdesk/chat.png">
+
+</div>
+
+<div class="icon-option ${menu.icon==='gear'?'active':''}"
+onclick="selectIcon(${menu.id},'gear')">
+
+<img src="icones_helpdesk/gear.png">
+
+</div>
+
+<div class="icon-option ${menu.icon==='bolt'?'active':''}"
+onclick="selectIcon(${menu.id},'bolt')">
+
+<img src="icones_helpdesk/bolt.png">
+
+</div>
+
+<div class="icon-option ${menu.icon==='notes'?'active':''}"
+onclick="selectIcon(${menu.id},'notes')">
+
+<img src="icones_helpdesk/notes.png">
+
+</div>
+
+</div>
+
+<button class="delete"
+onclick="deleteMenu(${menu.id})">
+
+Excluir Menu
+
+</button>
+
+`;
+
+el.appendChild(div);
+
+})
+
+}
+
+function updateMenu(id,key,val){
+
+const menu=data.menus.find(m=>m.id===id);
+
+menu[key]=val;
+
+save();
+
+render();
+
+}
+
+function deleteMenu(id){
+
+data.menus=data.menus.filter(m=>m.id!==id);
+
+data.scripts=data.scripts.filter(s=>s.menu!==id);
+
+save();
+
+render();
+
+}
+
+function addMenu(){
+
+data.menus.push({
+
+id:Date.now(),
+
+page:currentMenusPage,
+
+title:'Novo Menu',
+
+desc:'Descrição do menu',
+
+icon:'chat'
+
+});
+
+save();
+
+render();
+
+}
+
+function openMenusEditor(page){
+
+currentMenusPage=page;
+
+openModal('menusModal');
+
+renderMenusEditor();
+
+}
+
+function openScriptEditor(menuId){
+
+currentMenuEditing=menuId;
+
+const modal=document.getElementById('singleScriptModal');
+
+modal.classList.add('active');
+
+const editor=document.getElementById('singleScriptsEditor');
+
+editor.innerHTML='';
+
+data.scripts
+.filter(s=>s.menu===menuId)
+.forEach(script=>{
+
+const div=document.createElement('div');
+
+div.className='editor-card';
+
+div.innerHTML=`
+
+<label>Título</label>
+
+<input value="${script.title}"
+onchange="updateScript(${script.id},'title',this.value)">
+
+<label>Texto</label>
+
+<textarea rows="4"
+onchange="updateScript(${script.id},'text',this.value)">
+
+${script.text}
+
+</textarea>
+
+<button class="delete"
+onclick="deleteScript(${script.id})">
+
+Excluir Script
+
+</button>
+
+`;
+
+editor.appendChild(div);
+
+});
+
+}
+
+function updateScript(id,key,val){
+
+const script=data.scripts.find(s=>s.id===id);
+
+script[key]=val;
+
+save();
+
+render();
+
+}
+
+function deleteScript(id){
+
+data.scripts=data.scripts.filter(s=>s.id!==id);
+
+save();
+
+openScriptEditor(currentMenuEditing);
+
+render();
+
+}
+
+function addScriptToCurrentMenu(){
+
+data.scripts.push({
+
+id:Date.now(),
+
+menu:currentMenuEditing,
+
+title:'Novo Script',
+
+text:'Digite o conteúdo'
+
+});
+
+save();
+
+openScriptEditor(currentMenuEditing);
+
+render();
+
+}
+
+window.onclick=e=>{
+
+document.querySelectorAll('.modal').forEach(m=>{
+
+if(e.target===m)
+m.classList.remove('active');
+
+})
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
